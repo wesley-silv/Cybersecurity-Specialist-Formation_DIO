@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Demo — Facebook-like Login (Educational Only)</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f2f4f7; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
+    .card { background:white; padding:24px; border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,0.08); width:360px; }
+    h1 { font-size:18px; margin:0 0 12px 0; }
+    .warning { background:#fff4e5; color:#6b3e00; padding:8px; border-radius:6px; font-size:13px; margin-bottom:12px; }
+    label { display:block; margin-top:8px; font-size:13px; }
+    input { width:100%; padding:8px; margin-top:6px; box-sizing:border-box; border-radius:6px; border:1px solid #d1d7de; }
+    button { margin-top:14px; width:100%; padding:10px; border-radius:6px; border:none; background:#1877f2; color:white; font-weight:600; cursor:pointer; }
+    .note { margin-top:12px; font-size:12px; color:#555; }
+    .result { margin-top:12px; padding:10px; background:#eef7ff; border-radius:6px; font-size:13px; display:none; }
+    .footer { margin-top:16px; font-size:11px; color:#777; text-align:center; }
+  </style>
+</head>
+<body>
+  <div class="card" role="main">
+    <h1>Demo — Facebook-like Login (Educational)</h1>
+
+    <div class="warning">
+      DEMO ONLY — DO NOT ENTER REAL CREDENTIALS. This page is local and does not send data anywhere.
+    </div>
+
+    <form id="demoForm" onsubmit="return false;">
+      <label for="email">Email or phone</label>
+      <input id="email" name="email" type="text" placeholder="user@example.com" autocomplete="off" />
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" placeholder="••••••••" autocomplete="off" />
+
+      <button id="loginBtn" type="submit">Log In (Demo)</button>
+
+      <div class="result" id="resultBox" aria-live="polite"></div>
+
+      <div class="note">
+        This demo simulates a login. No data is stored. It shows a dummy token for learning purposes.
+      </div>
+    </form>
+
+    <div class="footer">
+      For learning only — follow the lab guide and ethical notice in the repository.
+    </div>
+  </div>
+
+  <script>
+    // Client-side simulation only. No network requests.
+    const form = document.getElementById('demoForm');
+    const result = document.getElementById('resultBox');
+
+    function createDummyToken() {
+      // simple random token for demo
+      const parts = [
+        Math.random().toString(36).slice(2,8).toUpperCase(),
+        Math.random().toString(36).slice(2,8).toUpperCase(),
+        Math.random().toString(36).slice(2,6).toUpperCase()
+      ];
+      return parts.join('-');
+    }
+
+    form.addEventListener('submit', () => {
+      const email = document.getElementById('email').value || '[no input]';
+      const pwd = document.getElementById('password').value ? '••••••' : '[no input]';
+
+      // IMPORTANT: we DO NOT send data anywhere.
+      const demoToken = createDummyToken();
+      result.style.display = 'block';
+      result.innerHTML = `<strong>DEMO RESULT</strong><br>
+        Email entered: <em>${escapeHtml(email)}</em><br>
+        Password entered: <em>${escapeHtml(pwd)}</em><br>
+        Sample token (dummy): <code>${demoToken}</code><br>
+        <small>This is a simulated response. No real data was collected.</small>`;
+
+      // Clear inputs to avoid leaving user data in form
+      document.getElementById('email').value = '';
+      document.getElementById('password').value = '';
+    });
+
+    // tiny escape to show text safely
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"'\/]/g, function (c) {
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','/':'&#47;'}[c];
+      });
+    }
+
+    // also handle click on the button
+    document.getElementById('loginBtn').addEventListener('click', () => form.dispatchEvent(new Event('submit')));
+  </script>
+</body>
+</html>
